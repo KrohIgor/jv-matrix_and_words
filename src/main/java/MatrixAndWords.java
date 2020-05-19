@@ -4,23 +4,22 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MatrixAndWords {
-    private static List<Point> list = new ArrayList<>();
-    private static char[][] charMatrix;
 
-    public static void main(String[] args) {
+    public static String buildMatrixAndFindWord() {
         String matrixString = readStringMatrix();
         String word = readWord(matrixString.length());
-        initializationCharMatrix(matrixString);
-        sequenceOfCellsMakingUpAGivenWord(word, charMatrix);
+        char[][] charMatrix = initializeCharMatrix(matrixString);
+        List<Point> list = findLetterCells(word, charMatrix);
+        String result = "";
         if (list.size() > 0) {
-            System.out.println(buildResultString());
+            result = buildResultString(list);
         } else {
-            System.out.println("Cell sequence not found!");
-            ;
+            result = "Cell sequence not found!";
         }
+        return result;
     }
 
-    private static String buildResultString() {
+    private static String buildResultString(List<Point> list) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             if (i != 0) {
@@ -31,15 +30,16 @@ public class MatrixAndWords {
         return result.toString();
     }
 
-    private static void sequenceOfCellsMakingUpAGivenWord(String word, char[][] charMatrix) {
+    private static List<Point> findLetterCells(String word, char[][] charMatrix) {
+        List<Point> list = new ArrayList<>();
         if (word.length() > 0) {
             char letter = word.charAt(0);
             for (int j = 0; j < charMatrix.length; j++) {
                 for (int k = 0; k < charMatrix[j].length; k++) {
                     if (letter == charMatrix[j][k]) {
-                        findCellsOfLettersOfTheWord(word, 0, j, k);
+                        findLetterCellsInMatrix(word, list, charMatrix, 0, j, k);
                         if (list.size() == word.length()) {
-                            return;
+                            return list;
                         } else {
                             list = new ArrayList<>();
                         }
@@ -47,9 +47,11 @@ public class MatrixAndWords {
                 }
             }
         }
+        return list;
     }
 
-    private static void findCellsOfLettersOfTheWord(String word, int i, int x, int y) {
+    private static void findLetterCellsInMatrix(String word, List<Point> list,
+                                                char[][] charMatrix, int i, int x, int y) {
         Point point = new Point(x, y);
         list.add(point);
         if (i == word.length() - 1) {
@@ -59,25 +61,25 @@ public class MatrixAndWords {
         if (x - 1 >= 0 && charMatrix[x - 1][y] == letter) {
             Point pointNext = new Point(x - 1, y);
             if (!list.contains(pointNext)) {
-                findCellsOfLettersOfTheWord(word, i, x - 1, y);
+                findLetterCellsInMatrix(word, list, charMatrix, i, x - 1, y);
             }
         }
         if (x + 1 < charMatrix.length && charMatrix[x + 1][y] == letter) {
             Point pointNext = new Point(x + 1, y);
             if (!list.contains(pointNext)) {
-                findCellsOfLettersOfTheWord(word, i, x + 1, y);
+                findLetterCellsInMatrix(word, list, charMatrix, i, x + 1, y);
             }
         }
         if (y - 1 >= 0 && charMatrix[x][y - 1] == letter) {
             Point pointNext = new Point(x, y - 1);
             if (!list.contains(pointNext)) {
-                findCellsOfLettersOfTheWord(word, i, x, y - 1);
+                findLetterCellsInMatrix(word, list, charMatrix, i, x, y - 1);
             }
         }
         if (y + 1 < charMatrix[x].length && charMatrix[x][y + 1] == letter) {
             Point pointNext = new Point(x, y + 1);
             if (!list.contains(pointNext)) {
-                findCellsOfLettersOfTheWord(word, i, x, y + 1);
+                findLetterCellsInMatrix(word, list, charMatrix, i, x, y + 1);
             }
         }
         if (list.size() != word.length()) {
@@ -85,12 +87,13 @@ public class MatrixAndWords {
         }
     }
 
-    private static void initializationCharMatrix(String matrixString) {
+    private static char[][] initializeCharMatrix(String matrixString) {
         int lengthMatrix = (int) Math.sqrt(matrixString.length());
-        charMatrix = new char[lengthMatrix][lengthMatrix];
+        char[][] charMatrix = new char[lengthMatrix][lengthMatrix];
         for (int i = 0; i < matrixString.length(); i++) {
             charMatrix[i / lengthMatrix][i % lengthMatrix] = matrixString.charAt(i);
         }
+        return charMatrix;
     }
 
     private static String readWord(int length) {
