@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class MatrixAndWords {
 
-    public static String buildMatrixAndFindWord() {
+    public String buildMatrixAndFindWord() {
         String matrixString = readStringMatrix();
         String word = readWord(matrixString.length());
         char[][] charMatrix = initializeCharMatrix(matrixString);
@@ -19,7 +19,7 @@ public class MatrixAndWords {
         return result;
     }
 
-    private static String buildResultString(List<Point> list) {
+    private String buildResultString(List<Point> list) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             if (i != 0) {
@@ -30,7 +30,7 @@ public class MatrixAndWords {
         return result.toString();
     }
 
-    private static List<Point> findLetterCells(String word, char[][] charMatrix) {
+    private List<Point> findLetterCells(String word, char[][] charMatrix) {
         List<Point> list = new ArrayList<>();
         if (word.length() > 0) {
             char letter = word.charAt(0);
@@ -50,7 +50,7 @@ public class MatrixAndWords {
         return list;
     }
 
-    private static void findLetterCellsInMatrix(String word, List<Point> list,
+    private void findLetterCellsInMatrix(String word, List<Point> list,
                                                 char[][] charMatrix, int i, int x, int y) {
         Point point = new Point(x, y);
         list.add(point);
@@ -87,7 +87,7 @@ public class MatrixAndWords {
         }
     }
 
-    private static char[][] initializeCharMatrix(String matrixString) {
+    private char[][] initializeCharMatrix(String matrixString) {
         int lengthMatrix = (int) Math.sqrt(matrixString.length());
         char[][] charMatrix = new char[lengthMatrix][lengthMatrix];
         for (int i = 0; i < matrixString.length(); i++) {
@@ -96,7 +96,7 @@ public class MatrixAndWords {
         return charMatrix;
     }
 
-    private static String readWord(int length) {
+    private String readWord(int length) {
         System.out.println("Input Word");
         Scanner scanner = new Scanner(System.in);
         String word = "";
@@ -111,7 +111,7 @@ public class MatrixAndWords {
         return word;
     }
 
-    private static String readStringMatrix() {
+    private String readStringMatrix() {
         System.out.println("Input a string of size N ^ 2 describing "
                 + "the square matrix of characters N * N");
         Scanner scanner = new Scanner(System.in);
